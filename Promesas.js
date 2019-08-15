@@ -10,25 +10,22 @@ function obtenerPersonaje(id){
         const url = `${API_URL}${PEOPLE_URL.replace(':id', id)}`
         $
         .get(url, opts, function (data){
-            resolve(data.name)
+            resolve(data)
         })
         .fail(()=> reject(id))
     })
 }
 
-
-async function obtenerPersonajes() {
-    var ids = [1,2,3,4,5,6,7]
-    var promises = ids.map(id => obtenerPersonaje(id))
-    try{
-        var personajes = await Promise.all(promises)
-        for(var personaje in personajes) { 
-            debugger
-            console.log(personajes[personaje])
-        }
-    } catch (id){
-        console.log('Error ' + id)
-    }
+function onSuccess(data){
+    console.log(`El personaje es ${data.name}`)
 }
 
-obtenerPersonajes()
+function onError(id){
+    console.log(`Sucedió un error al obtener el personaje ${id}`)
+}
+
+for(a=1;a<=25;a++){
+    obtenerPersonaje(a)
+        .then(onSuccess)
+        .catch(onError)
+}
